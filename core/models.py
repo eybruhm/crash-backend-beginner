@@ -124,6 +124,7 @@ class Report(models.Model):
         ('Pending', 'Pending'),           # Just submitted, waiting for police
         ('Acknowledged', 'Acknowledged'), # Police got it, they know about it
         ('En Route', 'En Route'),         # Police are on their way
+        ('On Scene', 'On Scene'),         # Police arrived at the scene
         ('Resolved', 'Resolved'),         # Incident handled, case closed
         ('Canceled', 'Canceled'),         # False alarm or canceled
     ]

@@ -42,10 +42,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'core',
+    'corsheaders',
     'storages',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -56,6 +58,23 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'crash_backend.urls'
+
+# CORS Configuration - Allow Frontend to Call Backend
+# Add production URLs when you deploy
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",      # Frontend development (Next.js)
+    "http://127.0.0.1:3000",     # Alternative localhost
+]
+
+# When you deploy, add your production URLs:
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:3000",
+#     "https://your-frontend-domain.com",
+# ]
+
+# Optional: Allow credentials (cookies, auth headers) in CORS requests
+CORS_ALLOW_CREDENTIALS = True
+
 
 TEMPLATES = [
     {
@@ -143,3 +162,4 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+

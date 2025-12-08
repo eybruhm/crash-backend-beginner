@@ -8,6 +8,8 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from rest_framework_nested import routers
+
+# Import main views from the modular views package
 from .views import (
     LoginAPIView,
     PoliceOfficeAdminViewSet,
@@ -19,12 +21,16 @@ from .views import (
     AdminMapAPIView,
     AnalyticsUpdateAPIView,
 )
+
+# Import analytics views from analytics module
 from .views.analytics import (
     AnalyticsOverviewSummaryAPIView,
     LocationHotspotsAPIView,
     CategoryConcentrationAPIView,
     AnalyticsExportAPIView,
 )
+
+# Import reports views from reports module
 from .views.reports import (
     ResolvedCasesAPIView,
     ResolvedCasesExportAPIView,
@@ -105,6 +111,18 @@ urlpatterns = [
     # =====================================================
     # ANALYTICS ENDPOINTS (Dashboard Statistics)
     # =====================================================
+    # These endpoints support query parameter filters:
+    #   ?days=30                    => Last 30 days (default)
+    #   ?scope=our_office           => Filter by specific office
+    #   ?office_id=<uuid>           => Office UUID for scope filtering
+    #   ?city=Manila                => Filter by city
+    #   ?barangay=Tondo             => Filter by barangay (requires city)
+    #   ?category=Robbery           => Filter by crime category
+    # Examples:
+    #   GET /analytics/summary/overview/?days=30&scope=our_office&office_id=abc123
+    #   GET /analytics/hotspots/locations/?days=7&category=Theft&city=Manila
+    #   GET /analytics/hotspots/categories/?days=90&scope=all
+    
     # GET /analytics/summary/overview/ => AnalyticsOverviewSummaryAPIView (total + avg resolution)
     path('analytics/summary/overview/', AnalyticsOverviewSummaryAPIView.as_view()),
 
@@ -123,6 +141,18 @@ urlpatterns = [
     # =====================================================
     # RESOLVED CASES ENDPOINTS (Case Files)
     # =====================================================
+    # These endpoints support the same query parameter filters as analytics:
+    #   ?days=30                    => Last 30 days (default)
+    #   ?scope=our_office           => Filter by specific office
+    #   ?office_id=<uuid>           => Office UUID for scope filtering
+    #   ?city=Manila                => Filter by city
+    #   ?barangay=Tondo             => Filter by barangay (requires city)
+    #   ?category=Robbery           => Filter by crime category
+    # Examples:
+    #   GET /reports/resolved/?days=7&scope=our_office&office_id=abc123
+    #   GET /reports/resolved/export/?days=30&category=Theft&city=Manila
+    #   GET /reports/<uuid>/export/  (no filters, single report only)
+    
     # GET /reports/resolved/ => ResolvedCasesAPIView (JSON list of resolved cases)
     path('reports/resolved/', ResolvedCasesAPIView.as_view()),
 
